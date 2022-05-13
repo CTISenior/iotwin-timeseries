@@ -17,10 +17,10 @@ const corsOptions = {
 };
 
 const apiLimiter = RateLimit({
-	windowMs: 10 * 60 * 1000, // 10 minutes
-	max: 100, // Limit each IP to 100 requests
-	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+	windowMs: 10 * 60 * 1000,
+	max: 100,
+	standardHeaders: true,
+  legacyHeaders: false,
   message: "Too many requests!",
 })
 
