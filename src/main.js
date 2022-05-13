@@ -6,6 +6,7 @@ const cors = require("cors")
 
 const app = express()
 const timeSeriesRouter = require('./routes/timeSeriesRouter')
+//const keycloak = require('./middleware/keycloak')
 
 const PORT = 4005
 const ENDPOINT = '/api/v1'
@@ -15,13 +16,13 @@ const corsOptions = {
   origin: `*`
 };
 
-/*const apiLimiter = RateLimit({
+const apiLimiter = RateLimit({
 	windowMs: 10 * 60 * 1000, // 10 minutes
 	max: 100, // Limit each IP to 100 requests
 	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
   message: "Too many requests!",
-})*/
+})
 
 app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({
@@ -29,13 +30,14 @@ app.use(express.urlencoded({
   extended: false
 }));
 app.use(cors(corsOptions));
-//app.use(apiLimiter); // apply rate limiter to all requests
+app.use(apiLimiter); // apply rate limiter to all requests
 app.use((request, response, next) => {
   next();
 });
 
 
-// Next -> API and DB Security
+// Next -> API Security
+// app.use( keycloak.middleware() );
 
 //use routers
 app.use(ENDPOINT, timeSeriesRouter); // -> middleware
@@ -47,4 +49,3 @@ app.listen(PORT, function(err){
 })
 
 /////////////////////////////////// SOCKET.IO ///////////////////////////////////
-//
